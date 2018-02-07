@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import java.awt.Color;
@@ -17,14 +18,21 @@ import javax.swing.JFileChooser;
 import javax.swing.ScrollPaneConstants;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.awt.event.ActionEvent;
 
+/**
+ * @author Pim Hoefmans
+ *date 07-02-2018
+ *klas Bi2a
+ *Deze class bevat de GUI elementen, hier word de GUI gevormd en de buttons een functie gegeven. Hierdoor is een bestand te zoeken en word de overeenkomst berekend.
+ */
+
 public class VirusGUI {
-	
-	
+		
 	private HashMap<Integer, HashMap> allData; 
 	private JFrame frame;
 	private JTextArea VLijst2;
@@ -37,6 +45,9 @@ public class VirusGUI {
 	/**
 	 * Launch the application.
 	 */
+	
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -87,9 +98,13 @@ public class VirusGUI {
 					HostId1.addItem(h.getHostnaam()+"\t"+ h.getId());
 					HostId2.addItem(h.getHostnaam()+"\t"+h.getId());
 				}
-				
-			} catch (Exception e) {
-				e.printStackTrace();
+			}
+				catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Het bestand is niet gevonden", "Error",JOptionPane.ERROR_MESSAGE);
+				} catch (NullPointerException e1) {
+					JOptionPane.showMessageDialog(null, "Er is iets fout gegaan bij het openen van het bestand", "Error",JOptionPane.ERROR_MESSAGE);
+				} catch (Exception e2) {
+				e2.printStackTrace();
 			}
 			
 		}
@@ -100,11 +115,14 @@ public class VirusGUI {
 		
 		JButton btnNewButton_1 = new JButton("Calculate");
 		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {				
-				calculateFunc();
-				
-			}
-		});
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					calculateFunc();
+					
+				} catch (Exception e2) {
+					e2.printStackTrace();
+				}
+		}});
 		
 		
 		btnNewButton_1.setBounds(646, 51, 120, 25);
@@ -171,17 +189,17 @@ public class VirusGUI {
 		lblViras.setBounds(29, 55, 113, 16);
 		panel.add(lblViras);
 		
-		JRadioButton rdbtnId = new JRadioButton("ID");
-		rdbtnId.setBounds(88, 136, 127, 25);
-		panel.add(rdbtnId);
+		JRadioButton idknop = new JRadioButton("ID");
+		idknop.setBounds(88, 136, 127, 25);
+		panel.add(idknop);
 		
-		JRadioButton rdbtnNewRadioButton = new JRadioButton("Classificatie");
-		rdbtnNewRadioButton.setBounds(88, 166, 127, 25);
-		panel.add(rdbtnNewRadioButton);
+		JRadioButton classknop = new JRadioButton("Classificatie");
+		classknop.setBounds(88, 166, 127, 25);
+		panel.add(classknop);
 		
-		JRadioButton rdbtnAantalHosts = new JRadioButton("Aantal hosts");
-		rdbtnAantalHosts.setBounds(88, 196, 127, 25);
-		panel.add(rdbtnAantalHosts);
+		JRadioButton aantalHosts = new JRadioButton("Aantal hosts");
+		aantalHosts.setBounds(88, 196, 127, 25);
+		panel.add(aantalHosts);
 	}
 
 	protected void calculateFunc() {
@@ -198,10 +216,6 @@ public class VirusGUI {
 		ArrayList<Virus> host2List = VirusLogica.setToArrayList(host2Set);
 		ArrayList<Virus> overlapList = VirusLogica.setToArrayList(overlapSet);
 		
-		//classification magic
-		
-		//sorting magic
-		
 		String veldHost1 = VirusLogica.arrayListToString(host1List);
 		String veldHost2 = VirusLogica.arrayListToString(host2List);
 		String veldOverlap = VirusLogica.arrayListToString(overlapList);
@@ -209,8 +223,7 @@ public class VirusGUI {
 		VLijst1.setText(veldHost1);
 		VLijst2.setText(veldHost2);
 		Overeenkomst.setText(veldOverlap);
-		
-		
+				
 	}
 
 	protected JTextArea getVLijst1() {

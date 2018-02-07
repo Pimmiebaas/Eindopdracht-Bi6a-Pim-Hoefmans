@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,13 +16,18 @@ import java.util.Set;
 import javax.swing.JOptionPane;
 
 
+/**
+ * @author Pim Hoefmans
+ *date 07-02-2018
+ *klas Bi2a
+ *Deze class bevat alle logica, hierin word het bestand ingelezen en worden dmv hashmaps, integers en strings de data verwerkt.
+ */
 public class VirusLogica {
 
 	static HashMap<Integer,Virus> virussen = new HashMap<Integer,Virus>();
 	static HashMap<Integer,Host> hosts = new HashMap<Integer,Host>();;
 	
 	public static HashMap<Integer, HashMap> haalData(String pad) throws Exception {
-		
 		
 		BufferedReader lezer = new BufferedReader(new FileReader(pad));
 		String regel = lezer.readLine();
@@ -86,16 +92,12 @@ public class VirusLogica {
 				
 
 			}
-
-			catch(Exception e3) {
-				//e3.printStackTrace();
+			catch(Exception e1) {
 			} 
+			
 			regel = lezer.readLine();
 
 		}
-
-		System.out.println(virussen.get(10243).getVirusnaam());
-		System.out.println(virussen.get(10243).getHostSet().size());
 		
 		allData.put(0, hosts);
 		allData.put(7, virussen);
@@ -128,6 +130,7 @@ public class VirusLogica {
 		}
 		
 		return result;
+		
 	}
 	
 	public static String arrayListToString(ArrayList<Virus> virusList) {
@@ -141,6 +144,45 @@ public class VirusLogica {
 		
 		
 	}
+	
+	public static Comparator<Virus> compareByIDComparator = new Comparator<Virus>() {
+
+		@Override
+		public int compare(Virus vir1, Virus vir2) {
+			int id1 = vir1.getId();
+			int id2 = vir2.getId();
+			
+			return Integer.compare(id1, id2);
+		}
+		
+	};
+	
+	public static Comparator<Virus> compareClassiComparator = new Comparator<Virus>() {
+
+		@Override
+		public int compare(Virus vir1, Virus vir2) {
+			String classi1 = vir1.getClassificatie();
+			String classi2 = vir2.getClassificatie();
+			
+			return classi1.compareTo(classi2);
+		}
+		
+		
+	};
+	
+	public static Comparator<Virus> compareAantalHosts = new Comparator<Virus>() {
+
+		@Override
+		public int compare(Virus vir1, Virus vir2) {
+			int aantal1 = vir1.getHostSet().size();
+			int aantal2 = vir2.getHostSet().size();
+			return Integer.compare(aantal1, aantal2);
+		}
+		
+		
+		
+	};
+	
 	
 	
 }
